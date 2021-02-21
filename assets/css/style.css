@@ -1,0 +1,12 @@
+#highscores {
+    background-color: transparent;
+    border: none;
+    overflow: hidden;
+    outline:none;
+}
+
+#choices {
+    color:white;
+    background-color: rgb(0, 81, 231);
+    font-style: "Helvetica";
+}
