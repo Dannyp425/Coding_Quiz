@@ -1,18 +1,26 @@
-//alert("There are 4 questions and you have a minute and 15 seconds.")
-
 var seconds = 75;
-var qI = 0;
-var aI = 0;
+var score = 0;
+var indexVal = 0;
 var questions = [
     {
-        q: "Is boolean a data type?",
-        answers: ["yes", "no", "maybe", "boolean?"],
-        c: 0
+        q: "Commonly used data types Do Not include: ",
+        a: ["Strings", "Booleans", "Alerts", "Numbers"],
+        c: "Alerts"
     },
     {
-        q: "Is flexbox good?",
-        answers: ["yes", "no", "maybe", "flexbox?"],
-        c: 0
+        q: "A very useful tool used during development and debugging for printing content to thee debugger is: ",
+        a: ["JavaScript", "terminal/bash", "for loops", "console.log"],
+        c: "console.log"
+    },
+    {
+        q: "The  condition in an if / else statement is enclosed with _____",
+        a: ["quotes", "curly brackets", "parenthesis", "square brackets"],
+        c: "parenthesis"
+    },
+    {
+        q: "Arrayd in JavaScript can be used to store ____",
+        a: ["numbers and strings", "other arrays", "booleans", "all of the  above"],
+        c: "all of the  above"
     },
 
 ];
@@ -29,127 +37,121 @@ function frontPage() {
                 .prop({
                     type: "button",
                     id: "start",
+                    class: "col-3 just-fy-content-around",
                     innerHTML: "Start Quiz!",
                 })
         )
     $("#start")
         .on("click", function () {
-            startQuiz(0, 0);
+            startQuiz();
         });
-    $("choice1")
+    $("#highscores")
+        .on("click", endQuiz);
+    $("#choice1")
         .hide()
-    $("choice2")
+    $("#choice2")
         .hide()
-    $("choice3")
+    $("#choice3")
         .hide()
-    $("choice4")
+    $("#choice4")
         .hide()
 };
 
-function startQuiz(x, y) {
-
+function startQuiz() {
     var interval = setInterval(() => {
         $("#timer").text("Timer:   " + seconds);
         if (seconds < 1) {
             clearInterval(interval);
+            endQuiz;
         }
         seconds--;
     }, 1000);
-    qI = x;
-    aI = y;
-    loadQuestions(qI);
-    loadAnswers(aI);
+     if( indexVal < questions.length){
+        loadQuestions(indexVal);
+        console.log(indexVal);
+     };
+};
+
+function endQuiz() {
+    $("#title")
+        .text("All Done!");
+    $("#intro-text")
+        .text("Your final score is: " + score);
+    $("#choice1")
+        .hide()
+    $("#choice2")
+        .hide()
+    $("#choice3")
+        .hide()
+    $("#choice4")
+        .hide()
+};
+
+function highScoresPage() {
 
 };
 
 function loadQuestions(index) {
-    $("#questions")
-        .text(questions[index].q);
-    qI++;
+    $("#highscores")
+        .hide();
+    if (index < questions.length) {
+        $("#questions")
+            .text(questions[index].q);
+        loadAnswers(index);
+    } else {
+        endQuiz();
+    }
 };
 
 function loadAnswers(index) {
-    $("#choice1")
-        // .append(
-        //     $(document.createElement('button')).prop({
-        //         type: 'button',
-        //         innerHTML: questions[index].answers[0],
-        //     })
-        // )
-        .show()
-        .text(questions[index].answers[0])
-        .on("click", function () {
-            var picked = $("#choice2").text();
-            checkAnswer(index, picked);
-            qI++;
-            aI++;
-            loadQuestions(qI);
-            loadAnswers(aI);
-        });
-    $("#choice2")
-        // .append(
-        //     $(document.createElement('button')).prop({
-        //         type: 'button',
-        //         innerHTML: questions[index].answers[1],
-        //     })
-        // )
-        .show()
-        .text(questions[index].answers[1])
-        .on("click", function () {
-            var picked = $("#choice2").text();
-            checkAnswer(index, picked);
-            qI++;
-            aI++;
-            loadQuestions(qI);
-            loadAnswers(aI);
+     $("#choice1")
+         .show()
+         .text(questions[index].a[0])
+         .on("click", function () {
+             var picked = $(this).text();
+             checkAnswer(picked);
+             loadQuestions(indexVal);
+         });
+     $("#choice2")
+         .show()
+         .text(questions[index].a[1])
+         .on("click", function () {
+             var picked = $(this).text();
+             checkAnswer(picked);
+             loadQuestions(indexVal);
         });
     $("#choice3")
-        // .append(
-        //     $(document.createElement('button')).prop({
-        //         type: 'button',
-        //         innerHTML: questions[index].answers[2],
-        //     })
-        // )
         .show()
-        .text(questions[index].answers[2])
+        .text(questions[index].a[2])
         .on("click", function () {
-            var picked = $("#choice2").text();
-            checkAnswer(index, picked);
-            qI++;
-            aI++;
-            loadQuestions(qI);
-            loadAnswers(aI);
+            console.log(index);
+            var picked = $(this).text();
+            checkAnswer(picked);
+            loadQuestions(indexVal);
         });
-    $("#choice4")
-        // .append(
-        //     $(document.createElement('button')).prop({
-        //         type: 'button',
-        //         innerHTML: questions[index].answers[3],
-        //     })
-        // )
-        .show()
-        .text(questions[index].answers[3])
-        .on("click", function () {
-            var picked = $("#choice2").text();
-            checkAnswer(index, picked);
-            qI++;
-            aI++;
-            loadQuestions(qI);
-            loadAnswers(aI);
-        });
+     $("#choice4")
+         .show()
+         .text(questions[index].a[3])
+         .on("click", function () {
+             var picked = $(this).text();
+             checkAnswer(picked);
+             loadQuestions(indexVal);
+         });
 }
 
-function checkAnswer(i1, i2) {
-    console.log(questions[i1].c, i2);
+function checkAnswer(i) {
+    console.log(i, questions[indexVal].c);
 
-    if (i2 === questions[i1].c) {
-        alert("Correct");
+    if (questions[indexVal].c === i) {
+        $(".response")
+            .text("Correct");
     } else {
-        alert("Wrong");
+        $(".response")
+            .text("Wrong");
         seconds -= 10;
-    }
-
-}
+    } 
+    indexVal++;
+};
 
 frontPage();
 // end function, display question
